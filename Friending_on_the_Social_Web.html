@@ -95,9 +95,9 @@
 
     <p>Any resource can point to a simple xml-rpc pingback service by declaring a relation from the resource to such a service in one simple statement written in Turtle as:</p>
 
-    <pre>@prefix pingback: &lt;http://purl.org/net/pingback/&gt; .
+    <pre>@prefix ping: &lt;http://purl.org/net/pingback/&gt; .
 
-    &lt;&gt; pingback:service &lt;http://pingback.aksw.org/xmlrpc&gt; .
+    &lt;&gt; ping:service &lt;http://pingback.aksw.org/xmlrpc&gt; .
     </pre>
 
     <p>This allows integration with existing deployments of XML-RPC pingbacks. But it also allows a more RESTful protocol which we will next describe.<br /></p>
@@ -105,28 +105,28 @@
     <h2>3. RESTful Pings: take it easy</h2>
 
     <div class="image">
-        <img src="images/sequence.png" />
-        <div class="caption">Pingback protocol sequence <span class="todo">bblfish: edit the graffle and change the labels for RESTful pings ...</span></div>
+        <img src="images/Romeo-Juliet-Ping.jpg" />
+        <div class="caption">Pingback protocol sequence</div>
     </div>
 
-    <p>A resource can describe its relationship to a RESTful ping service by relating itself via the <a href="http://docs.aksw.org/SemanticPingback/namespace.html#id35802525">pingback:to</a> relation to a <a href="http://docs.aksw.org/SemanticPingback/namespace.html#id35802321">pingback:Container</a>. In <a href="http://www.w3.org/TeamSubmission/turtle/">Turtle</a> the relation would be written as:</p>
-    <pre>&lt;&gt; pingback:to &lt;http://pingback.aksw.org/&gt; .</pre>
+    <p>A resource can describe its relationship to a RESTful ping service by relating itself via the <a href="http://docs.aksw.org/SemanticPingback/namespace.html#id35802525">ping:to</a> relation to a <a href="http://docs.aksw.org/SemanticPingback/namespace.html#id35802321">ping:Container</a>. In <a href="http://www.w3.org/TeamSubmission/turtle/">Turtle</a> the relation would be written as:</p>
+    <pre>&lt;&gt; ping:to &lt;http://pingback.aksw.org/&gt; .</pre>
 
     <p>An html representation could include the above relation using RDFa as shown here:</p>
 
-<pre>&lt;html xmlns:pingback="http://purl.org/net/pingback/"&gt;
-    &lt;head&gt;&lt;link rel="pingback:to" href="http://pingback.aksw.org/"/&gt;&lt;/head&gt;
+<pre>&lt;html xmlns:ping="http://purl.org/net/pingback/"&gt;
+    &lt;head&gt;&lt;link rel="ping:to" href="http://pingback.aksw.org/"/&gt;&lt;/head&gt;
     &lt;body&gt;your html page&lt;/body&gt;
 &lt;/html&gt;</pre>
 
     <p>The same can be done in any other format for which the semantics are clearly specified as explained earlier.</p>
 
-    <p>The advantage of this relation over the pingback:service relation that points to an XML-RPC endpoint, is that the pingback:Container linked to  is just a normal web resource defined as one that  returns in its html representation a form with the input fields "source", "target" and "comment" and the action="" attribute.</p>
+    <p>The advantage of this relation over the ping:service relation that points to an XML-RPC endpoint, is that the ping:Container linked to  is just a normal web resource defined as one that  returns in its html representation a form with the input fields "source", "target" and "comment" and the action="" attribute.</p>
 
     <pre>&lt;!DOCTYPE html PUBLIC "-//W3C//DTD XHTML+RDFa 1.0//EN" "http://www.w3.org/MarkUp/DTD/xhtml-rdfa-1.dtd"&gt;
-&lt;html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" xmlns:pingback="http://purl.org/net/pingback/"&gt;
+&lt;html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" xmlns:ping="http://purl.org/net/pingback/"&gt;
     &lt;head&gt;&lt;title&gt;Test PingBack Endpoint&lt;/title&gt;&lt;/head&gt;
-    &lt;body typeof="pingback:Container"&gt;
+    &lt;body typeof="ping:Container"&gt;
         &lt;form method="post" action=""&gt;
             &lt;p&gt;source: &lt;input type="text" name="source" /&gt;&lt;/p&gt;
             &lt;p&gt;target: &lt;input type="text" name="target" /&gt;&lt;/p&gt;
@@ -138,7 +138,7 @@
 
     <p>The <a href="http://pingback.aksw.org">pingback.aksw.org</a> container was the first one to be deployed: try it out!.</p>
 
-    <p>Here, a human being that follows his nose to the form in a browser should be able to fill  it out by hand and get the same result a robot would. A robot will know that it can send a form with those fields to that container because it has declared itself to be a <code>pingback:Container</code> with RDFa such as <code>&lt;body typeof="pingback:Container"&gt;</code> shown above.</p>
+    <p>Here, a human being that follows his nose to the form in a browser should be able to fill  it out by hand and get the same result a robot would. A robot will know that it can send a form with those fields to that container because it has declared itself to be a <code>ping:Container</code> with RDFa such as <code>&lt;body typeof="ping:Container"&gt;</code> shown above.</p>
 
     <p>Notice the <code>action=""</code> which means that the POST will go to the same resource from which the html came. This means that the robot sending the ping can be sure that the resource has the same interpretation of the meaning of the <code>source</code>, <code>target</code> and <code>comment</code> fields, and not be a request of a totally different nature, such as the commitment to buy a product for example. This is important because html forms fields are not namespaced, and their meaning is therefore resource dependent.</p>
 
