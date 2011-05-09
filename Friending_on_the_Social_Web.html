@@ -1,0 +1,178 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML+RDFa 1.0//EN"
+    "http://www.w3.org/MarkUp/DTD/xhtml-rdfa-1.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml" xmlns:dc="http://purl.org/dc/elements/1.1/" xmlns:foaf="http://xmlns.com/foaf/0.1/" version="XHTML+RDFa 1.0" >
+<head>
+  <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+  <meta property="dc:subject" content="Social Web, pingback, foaf, WebID, REST, authentication" />
+  <title>Friending on the Social Web</title>
+  <style type="text/css">
+  @import url("http://www.w3.org/StyleSheets/TR/base.css");
+  body {
+    font-family: Arial, Helvetica, sans-serif;
+    width: 80%;
+    background-color: white;
+    text-align: justify;
+  }
+  h1, div.description, div.figure {
+    text-align:center;
+  }
+  pre {
+    background-color: #FFFFE0;
+  }
+  .headerish { color: #005A9C; background: white }
+  .highlight {
+    color:red;
+    font-weight:bold;
+  }
+  ul.authorship { list-style:none; }
+  ul.authorship li { display: inline; }
+#  ul.authorship li:before { content: ' • ' }
+  </style>
+</head>
+
+<body>
+    <h1 property="dc:title">Friending on the Social Web</h1>
+    <div class="description">
+<!--
+        <p datatype="" property="dc:description">Position Paper for <a href=
+        "http://d-cent.org/fsw2011/">Federated Social Web</a>
+        2nd-5th May 2011, Berlin (Germany)</p>
+-->
+        <p class="headerish"><strong>Authors</strong>:</p> 
+        <ul class="authorship" rel="dc:creator">
+          <li about="http://bblfish.net/#hjs" typeof="foaf:Person"><a rel="foaf:homepage" href="http://bblfish.net/"  property="foaf:name">Henry Story</a>, WebID Incubator Chair<br /></li>
+          <li about="http://fcns.eu/people/andrei/card#me" typeof="foaf:Person"><a rel="foaf:homepage" href="http://fcns.eu/"  property="foaf:name">Andrei Sambra</a>, <a rel="foaf:workplaceHomepage" href="http://www.telecom-sudparis.eu/en_accueil.html">TELECOM SudParis</a></li> 
+        </ul>
+    </div>
+    
+    <h2>Abstract</h2>
+    
+    <p><a href="http://foaf-project.org">FOAF</a> profiles bind together the most widely deployed distributed Social Network in existence, despite the lack of deployed ways to automate the creation of new friending relations. A similar problem appeared on the world wide distributed social conversation that is the blogosphere, where users were keen to keep track of articles mentioning ones they posted. A number of solutions were developed and widely deployed. We describe these solutions here and show how they  can be extended to the social web, to the benefit of all, in a light, easy to use and Web Architecture friendly manner.<br /></p>
+    
+    <h2>1. The Friending Problem</h2>
+ 
+    <p>The Social Web, as a decentralized system, requires a friending mechanism. Let us illustrate this with a short use case. Romeo meets Juliet at a party and they get along well.  Juliet enjoys Romeo’s conversation and gives him a card  with the URL of her home page or blog. Later Romeo enters one of those links into his Social Web Server (SWS), which then displays Juliet’s information and gives Romeo the opportunity to add her WebID to his friend list. Currently, as of May 2010, there is no way for Romeo to alert Juliet of his having added her to his list of friends as Juliet does not publish her e-mail for fear of spam. And even if she did provide an e-mail, Romeo does not want his friendship with Juliet to be dependent on her ability to edit XML files.</p>
+
+    <p>What Romeo wants is for this process to be automated by their SWS. Romeo’s server should upon updating his foaf profile be able to ping Juliet’s server. On receiving the ping, Juliet’s SWS should verify it, and inform her (now or later) of this friendship request.  If she accepts, her SWS can then give Romeo greater access to her restricted resources by allowing him to authenticate using <a href="http://www.w3.org/wiki/foaf+ssl">WebID</a>.</p>
+
+    <p>Here we are doing something very similar to what is known on the blogosphere as pingback. We will describe these protocols and then show how we can extend them to cover the friending mechanism, and much more.<br /></p>
+   
+    <h2>2. Pingback History</h2>
+    
+    <p>The visibility of a Web resource is determined by the quality of the links to it.  The Blogosphere noticed this very soon and sought to help automate the weaving of the distributed conversations that make it up. This resulted in the development of a number of protocols that were designed to make it easy for web sites to link back to blogs that referred to them:  Refback, Trackback and Pingback.<br /></p>
+   
+    <h3>2.1 Refback</h3>
+
+    <p><a href="http://en.wikipedia.org/wiki/Refback">Refback</a> is the simplest of all pingback protocols. It simply uses the <a href="http://www.w3.org/Protocols/rfc2616/rfc2616-sec14.html#sec14.36">HTTP Referer</a> header that browsers  include in HTTP requests and that web servers log to find pages that link to a given resource. The server can then check the referred-to resource to verify the link.</p>
+
+    <p>An HTTP Referrer header will be generated whenever a link is clicked in a browser and is also very easy to generate outside the limits of the browser. But as a result it is impossible for the server to distinguish intentional and unintentional pings.<br /></p>
+ 
+    <h3>2.2 Trackback</h3>
+
+    <p>The <a href="http://www.sixapart.com/pronet/docs/trackback_spec">Trackback</a> protocol, developed in 2002, was the first to enable intentional pings.  If Juliet published an article referring to her dear friend Nora’s entry on “Nightingales”, Juliet’s blog server would find the link in the newly published blog entry, fetch Nora’s post and search it for a piece of embedded RDF/XML to <strong>discover</strong> the resource to ping. Juliet’s server could then POST  the Trackback ping consisting of the <i>title</i> and <i>url</i> of Juliet’s new post and an optional <i>excerpt</i> of the content as well as the <i>blog_name</i>. As a result of this Nora’s server would publish a pointer back to Juliet’s article containing the excerpt sent in the ping. She might do this only after checking with Nora, of course.</p>
+    
+    <p>As is clear from these field names, this protocol was very designed for and limited to blog posts, and so would not be suitable for other usages, such as a the friend ping we are interested in.</p>
+
+    <p>Trackback also had the further disadvantages of tying the protocol to a representation embedded in a representation - RDF/XML inside a comment inside HTML - for very little benefit and with no standard support, making parsing very difficult. This is currently considered very bad practice in the semantic web community, which has developed RDFa to allow a clean expression of RDF in html.</p>
+
+    <p>The success or failure of the ping was described in a specially developed XML format returned in the response, with a field containing 0 for failure and 1 for success. Clearly the standard <a href="http://www.w3.org/Protocols/rfc2616/rfc2616-sec10.html#sec10">HTTP status codes</a> should have been used instead.<br /></p>
+
+    <h3>2.3 Pingback</h3>
+
+    <p><a href="http://www.hixie.ch/specs/pingback/pingback">Pingback</a> removed the RDF/XML embedding for discovery of the ping service, and provided the choice of two standardized methods:  a link relation of type pingback in the html header: <i>&lt;link rel="pingback" href="pingback server" /&gt;</i>, or an X-Pingback attribute in the HTTP header: <i>X-Pingback: http://charlie.example.com/pingback/xmlrpc</i>.</p>
+
+    <p>This allowed any resource, including pictures and videos to define their ping service, so that their owners could be made aware of resources that referred to them.</p>
+
+    <p>The format of the ping used XML-RPC in order to notify the pingback service with two pieces of information: the URL of the linking resource and the URL to the linked-to resource, which is exactly the information produced by the Refback protocol. So one may wonder then what does Pingback really enabled over and above Refback? Apart from using POST and making intentionality of the ping clear as Trackback does, the only other answer is that it enables third-party ping services. This allows people with resources posted on servers they do not control to nevertheless receive pings.</p>
+
+    <p>The XML-RPC protocol was popular at the beginning of the millennium but now feels very dated. RESTful web services would now shy away from <a href="http://www.hixie.ch/specs/pingback/pingback#TOC3">hexadecimal error responses</a> encoded in XML.<br /></p>
+
+    <h3>2.4 Semantic Pingback</h3>
+
+    <p><a href="http://aksw.org/Projects/SemanticPingBack">Semantic pingback</a> makes it easy for any format to declare its pingback service, by abstracting from formats and defining the protocol at the semantic level. Any format that can be transformed into RDF, can participate. Using <a href="http://www.w3.org/2004/01/rdxh/spec">GRDDL</a> any XML can be mapped to RDF. json-GRDDL provides the same service for JSON.</p>
+
+    <p>Any resource can point to a simple xml-rpc pingback service by declaring a relation from the resource to such a service in one simple statement written in Turtle as:</p>
+
+    <pre>@prefix pingback: &lt;http://purl.org/net/pingback/&gt; .
+
+    &lt;&gt; pingback:service &lt;http://pingback.aksw.org/xmlrpc&gt; .
+    </pre>
+    
+    <p>This allows integration with existing deployments of XML-RPC pingbacks. But it also allows a more RESTful protocol which we will next describe.<br /></p>
+  
+    <h2>3. RESTful Pings: take it easy</h2>
+
+    <p>A resource can describe its relationship to a RESTful ping service by adding the <a href="http://docs.aksw.org/SemanticPingback/namespace.html#id35802525">pingback:to</a> relation to a <a href="http://docs.aksw.org/SemanticPingback/namespace.html#id35802321">pingback:Container</a>, of which the <a href="http://aksw.org">aksw.org</a> one was the first implementation (try it out). In <a href="http://www.w3.org/TeamSubmission/turtle/">Turtle</a> the relation would be written as:</p>
+    <pre>&lt;&gt; ping:to &lt;http://pingback.aksw.org/&gt; .</pre>
+
+    <p>An html representation could include the above relation using RDFa as shown here:</p>
+
+<pre>&lt;html xmlns:pingback="http://purl.org/net/pingback/"&gt;
+    &lt;head&gt;&lt;link rel="ping:to" href="http://pingback.aksw.org/"/&gt;&lt;/head&gt;
+    &lt;body&gt;your html page&lt;/body&gt;
+&lt;/html&gt;</pre>
+    
+    <p>The same can be done in any other format for which the semantics are clearly specified.</p>
+
+    <p>The advantage of this relation over the pingback:service relation that points to an XML-RPC endpoint, is that the pingback:Container linked to  is just a normal web resource defined as one that  returns in its html representation a form with the input fields "source", "target" and "comment" and the action="" attribute.</p>
+
+    <pre>&lt;!DOCTYPE html PUBLIC "-//W3C//DTD XHTML+RDFa 1.0//EN" "http://www.w3.org/MarkUp/DTD/xhtml-rdfa-1.dtd"&gt;
+&lt;html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" xmlns:pingback="http://purl.org/net/pingback/"&gt;
+    &lt;head&gt;&lt;title&gt;Test PingBack Endpoint&lt;/title&gt;&lt;/head&gt;
+    &lt;body typeof="pingback:Container"&gt;
+        &lt;form method="post" action=""&gt;
+            &lt;p&gt;source: &lt;input type="text" name="source" /&gt;&lt;/p&gt;
+            &lt;p&gt;target: &lt;input type="text" name="target" /&gt;&lt;/p&gt;
+            &lt;p&gt;comment: &lt;input type="text" name="comment" /&gt;&lt;/p&gt;
+            &lt;p&gt;&lt;input type="submit" name="submit" value="Send" /&gt;&lt;/p&gt;
+        &lt;/form&gt;
+    &lt;/body&gt;
+&lt;/html&gt;</pre>
+    
+    <p>Here, a human being that follows his nose to the form in a browser should be able to fill  it out by hand and get the same result a robot would. A robot will know that it can send a form with those fields to that container because it has declared itself to be a pingback:Container with the RDFa such as &lt;body typeof="pingback:Container"&gt; shown above.</p>
+
+    <p>Notice that action="" which means that the POST will go to the same resource from which the html came. This means that the robot sending the ping can be sure that the resource has the same interpretation of the meaning of the "source", "target" and "comment" fields, and not be a request of a totally different nature, such as the commitment to buy a product for example.</p> 
+
+    <p>The pingback server on receiving the POSTed form can verify that the source does indeed link to the target, and depending on a local policy, notify the owner of the target. In our initial example Romeo’s SWS would find the ping endpoint from the blog or home page given by Juliet, and send a ping with an optional message from Romeo. Juliet’s server could verify that Romeo’s foaf file does indeed point to Juliet, and forward her the message, with information about the place of Romeo in her social network as backing evidence. From there Juliet could accept the request and add Romeo to one of her friend categories, giving him more or less access to the protected resources on her server when he next connects and identifies himself with WebID or OpenID.</p>
+
+    <p>The access to the ping Collection can also be protected using WebID, allowing pingback services to find the identity of the pinger and to restrict ping senders for certain resources to a specific group.<br /></p>
+
+    <h2>4. Conclusions</h2>
+
+    <p>The RESTful pingback protocol makes it very easy to grow one’s social profile. But it can be used for a lot more. Some ideas would be:</p>
+    <ul>
+        <li>implementing a simple ‘poke me’ service</li>
+        <li>swat0: tag someone in a picture and notifying them </li>
+        <li>simple messaging service (possibly replace e-mail): post a local atom entry and ping the person one wants to send it to, allowing access to the entry only by authenticating them using WebID</li>
+        <li>Authorization: as described above with Romeo seeking access to Juliet’s files, but for commercial services (e.g. a recommendation service based on foaf:interest entries)</li>
+    </ul>
+
+    <p>Compared to Refback, RESTful pingback (RP) can send a comment, is more extensible, and can work with servers the user has very little control over.</p>
+
+    <p>Compared to Trackback, RP implements the semantics correctly, and does not require any specific formats to work.</p>
+
+    <p>Compared to Pingback, RP can work with all formats, does not require XML-RPC, works with HTTP return codes for error messaging, allowing robots and humans to work together (by simultaneously accessing the same resource).</p>
+
+    <p>If there was a way of semantically marking up forms even the attribute names would no longer need to be hard coded.<br /></p>
+
+    <h2>Implementations:</h2>
+    <ul>
+        <li>Initial <a href="http://aksw.org">aksw.org</a> e-mail based ping. If the foaf profile has a <i>mailto:</i> address, aksw will send the ping there</li>
+        <li><a href="http://webid.fcns.eu/pingback.php">http://webid.fcns.eu/</a></li>
+        <li><a href="http://incubator.apache.org/clerezza/">Apache Clerezza</a></li>
+    </ul>
+    
+    <p>&nbsp;</p>
+
+    <h2>References</h2>
+    <ul>
+        <li><a href="http://www.w3.org/wiki/WebID">http://www.w3.org/wiki/WebID</a></li>
+        <li><a href="http://en.wikipedia.org/wiki/Refback">http://en.wikipedia.org/wiki/Refback</a></li>
+        <li><a href="http://en.wikipedia.org/wiki/HTTP_referrer">http://en.wikipedia.org/wiki/HTTP_referrer</a></li>
+        <li><a href="http://www.sixapart.com/pronet/docs/trackback_spec">http://www.sixapart.com/pronet/docs/trackback_spec</a></li>
+        <li><a href="http://en.wikipedia.org/wiki/Pingback">http://en.wikipedia.org/wiki/Pingback</a></li>
+        <li>Weaving a Social Data Web with Semantic Pingback, Proceedings of the EKAW 2010, Sebastian Tramp, Philipp Frischmuth, Timofey Ermilov, and <a href="http://www.informatik.uni-leipzig.de/~auer/index.php?n=Main.Publications">Sören Auer</a></li>
+   </ul>
+</body>
+</html>
