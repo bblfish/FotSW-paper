@@ -71,7 +71,7 @@
 
     <p>The <a href="http://www.sixapart.com/pronet/docs/trackback_spec">Trackback</a> protocol, developed in 2002, was the first to enable intentional pings.  If Juliet published an article referring to her dear friend Nora’s entry on “Nightingales”, Juliet’s blog server would find the link in the newly published blog entry, fetch Nora’s post and search it for a piece of embedded RDF/XML to <strong>discover</strong> the resource to ping. Juliet’s server could then POST  the Trackback ping consisting of the <i>title</i> and <i>url</i> of Juliet’s new post and an optional <i>excerpt</i> of the content as well as the <i>blog_name</i>. As a result of this Nora’s server would publish a pointer back to Juliet’s article containing the excerpt sent in the ping. She might do this only after checking with Nora, of course.</p>
     
-    <p>As is clear from these field names, this protocol was very designed for and limited to blog posts, and so would not be suitable for other usages, such as a the friend ping we are interested in.</p>
+    <p>As is clear from these field names, this protocol was designed for and limited to blog posts, and so would not be suitable for other usages, such as a the friend ping we are interested in.</p>
 
     <p>Trackback also had the further disadvantages of tying the protocol to a representation embedded in a representation - RDF/XML inside a comment inside HTML - for very little benefit and with no standard support, making parsing very difficult. This is currently considered very bad practice in the semantic web community, which has developed RDFa to allow a clean expression of RDF in html.</p>
 
@@ -89,7 +89,7 @@
 
     <h3>2.4 Semantic Pingback</h3>
 
-    <p><a href="http://aksw.org/Projects/SemanticPingBack">Semantic pingback</a> makes it easy for any format to declare its pingback service, by abstracting from formats and defining the protocol at the semantic level. Any format that can be transformed into RDF, can participate. Using <a href="http://www.w3.org/2004/01/rdxh/spec">GRDDL</a> any XML can be mapped to RDF. json-GRDDL provides the same service for JSON.</p>
+    <p><a href="http://aksw.org/Projects/SemanticPingBack">Semantic pingback</a> makes it easy for documents in any format to declare a pingback service. It does this by abstracting from formats and defining the protocol at the semantic level. A format need just specify a transform into RDF. XML formats can do this using <a href="http://www.w3.org/2004/01/rdxh/spec">GRDDL</a>, and JSON formats can use <a href="http://buzzword.org.uk/2008/jsonGRDDL/spec.20100903">json-GRDDL</a>, similar transforms could be created for most other format.</p>
 
     <p>Any resource can point to a simple xml-rpc pingback service by declaring a relation from the resource to such a service in one simple statement written in Turtle as:</p>
 
@@ -102,17 +102,17 @@
   
     <h2>3. RESTful Pings: take it easy</h2>
 
-    <p>A resource can describe its relationship to a RESTful ping service by adding the <a href="http://docs.aksw.org/SemanticPingback/namespace.html#id35802525">pingback:to</a> relation to a <a href="http://docs.aksw.org/SemanticPingback/namespace.html#id35802321">pingback:Container</a>, of which the <a href="http://aksw.org">aksw.org</a> one was the first implementation (try it out). In <a href="http://www.w3.org/TeamSubmission/turtle/">Turtle</a> the relation would be written as:</p>
-    <pre>&lt;&gt; ping:to &lt;http://pingback.aksw.org/&gt; .</pre>
+    <p>A resource can describe its relationship to a RESTful ping service by relating itself via the <a href="http://docs.aksw.org/SemanticPingback/namespace.html#id35802525">pingback:to</a> relation to a <a href="http://docs.aksw.org/SemanticPingback/namespace.html#id35802321">pingback:Container</a>. In <a href="http://www.w3.org/TeamSubmission/turtle/">Turtle</a> the relation would be written as:</p>
+    <pre>&lt;&gt; pingback:to &lt;http://pingback.aksw.org/&gt; .</pre>
 
     <p>An html representation could include the above relation using RDFa as shown here:</p>
 
 <pre>&lt;html xmlns:pingback="http://purl.org/net/pingback/"&gt;
-    &lt;head&gt;&lt;link rel="ping:to" href="http://pingback.aksw.org/"/&gt;&lt;/head&gt;
+    &lt;head&gt;&lt;link rel="pingback:to" href="http://pingback.aksw.org/"/&gt;&lt;/head&gt;
     &lt;body&gt;your html page&lt;/body&gt;
 &lt;/html&gt;</pre>
     
-    <p>The same can be done in any other format for which the semantics are clearly specified.</p>
+    <p>The same can be done in any other format for which the semantics are clearly specified as explained earlier.</p>
 
     <p>The advantage of this relation over the pingback:service relation that points to an XML-RPC endpoint, is that the pingback:Container linked to  is just a normal web resource defined as one that  returns in its html representation a form with the input fields "source", "target" and "comment" and the action="" attribute.</p>
 
@@ -128,14 +128,16 @@
         &lt;/form&gt;
     &lt;/body&gt;
 &lt;/html&gt;</pre>
-    
-    <p>Here, a human being that follows his nose to the form in a browser should be able to fill  it out by hand and get the same result a robot would. A robot will know that it can send a form with those fields to that container because it has declared itself to be a pingback:Container with the RDFa such as &lt;body typeof="pingback:Container"&gt; shown above.</p>
 
-    <p>Notice that action="" which means that the POST will go to the same resource from which the html came. This means that the robot sending the ping can be sure that the resource has the same interpretation of the meaning of the "source", "target" and "comment" fields, and not be a request of a totally different nature, such as the commitment to buy a product for example.</p> 
+    <p>The <a href="http://aksw.org">aksw.org</a> container was the first one to be deployed: try it out!.</p>
+    
+    <p>Here, a human being that follows his nose to the form in a browser should be able to fill  it out by hand and get the same result a robot would. A robot will know that it can send a form with those fields to that container because it has declared itself to be a <code>pingback:Container</code> with RDFa such as <code>&lt;body typeof="pingback:Container"&gt;</code> shown above.</p>
+
+    <p>Notice the <code>action=""</code> which means that the POST will go to the same resource from which the html came. This means that the robot sending the ping can be sure that the resource has the same interpretation of the meaning of the <code>source</code>, <code>target</code> and <code>comment</code> fields, and not be a request of a totally different nature, such as the commitment to buy a product for example. This is important because html forms fields are not namespaced, and their meaning is therefore resource dependent.</p> 
 
     <p>The pingback server on receiving the POSTed form can verify that the source does indeed link to the target, and depending on a local policy, notify the owner of the target. In our initial example Romeo’s SWS would find the ping endpoint from the blog or home page given by Juliet, and send a ping with an optional message from Romeo. Juliet’s server could verify that Romeo’s foaf file does indeed point to Juliet, and forward her the message, with information about the place of Romeo in her social network as backing evidence. From there Juliet could accept the request and add Romeo to one of her friend categories, giving him more or less access to the protected resources on her server when he next connects and identifies himself with WebID or OpenID.</p>
 
-    <p>The access to the ping Collection can also be protected using WebID, allowing pingback services to find the identity of the pinger and to restrict ping senders for certain resources to a specific group.<br /></p>
+    <p>The access to the ping Collection can also be protected using <a href="http://webid.info/spec/">WebID</a>, allowing pingback services to find the identity of the pinger and to restrict ping senders for certain resources to a specific group. Juliet's SWS could by protecting her endpoint with WebID discover the WebID used by Romeo's SWS, and so present this ping correctly as coming from Romeo himself. <br /></p>
 
     <h2>4. Conclusions</h2>
 
