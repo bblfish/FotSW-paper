@@ -53,7 +53,7 @@
 
     <h2>1. The Friending Problem</h2>
 
-    <p>The Social Web, as a decentralized system, requires a friending mechanism. Let us illustrate this with a short use case. Romeo meets Juliet at a party and they get along well.  Juliet enjoys Romeo’s conversation and gives him a card  with the URL of her home page or blog. Later Romeo enters one of those links into his Social Web Server (SWS), which then displays Juliet’s information and gives Romeo the opportunity to add her WebID to his friend list. Currently, as of May 2010, there is no way for Romeo to alert Juliet of his having added her to his list of friends as Juliet does not publish her e-mail for fear of spam. And even if she did provide an e-mail, Romeo does not want his friendship with Juliet to be dependent on her ability to edit XML files.</p>
+    <p>The Social Web, as a decentralized system, requires a friending mechanism. Let us illustrate this with a short use case. Romeo meets Juliet at a party and they get along well.  Juliet enjoys Romeo’s conversation and gives him a card  with the URL of her home page or blog. Later Romeo enters one of those links into his Social Web Server (SWS), which then displays Juliet’s information and gives Romeo the opportunity to add her WebID to his friend list. Currently, (May 2011) there is still no widely deployed  way for Romeo to alert Juliet of his having added her to his list of friends as Juliet does not publish her e-mail for fear of spam. And even if she did provide an e-mail, Romeo does not want his friendship with Juliet to be dependent on her ability to edit XML files.</p>
 
     <p>What Romeo wants is for this process to be automated by their SWS. Romeo’s server should upon updating his foaf profile be able to ping Juliet’s server. On receiving the ping, Juliet’s SWS should verify it, and inform her (now or later) of this friendship request.  If she accepts, her SWS can then give Romeo greater access to her restricted resources by allowing him to authenticate using <a href="http://www.w3.org/wiki/foaf+ssl">WebID</a>.</p>
 
@@ -121,7 +121,7 @@
 
     <p>The same can be done in any other format for which the semantics are clearly specified as explained earlier.</p>
 
-    <p>The advantage of this relation over the ping:service relation that points to an XML-RPC endpoint, is that the ping:Container linked to  is just a normal web resource defined as one that  returns in its html representation a form with the input fields "source", "target" and "comment" and the action="" attribute.</p>
+    <p>The advantage of this relation over the ping:service relation that points to an XML-RPC endpoint, is that the ping:Container linked to  is just a normal web resource defined as one that  returns in its html representation a form with the input fields <code>"source"</code>, <code>"target"</code> and <code>"comment"</code> and the <code>action=""</code> attribute.</p>
 
     <pre>&lt;!DOCTYPE html PUBLIC "-//W3C//DTD XHTML+RDFa 1.0//EN" "http://www.w3.org/MarkUp/DTD/xhtml-rdfa-1.dtd"&gt;
 &lt;html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" xmlns:ping="http://purl.org/net/pingback/"&gt;
@@ -146,15 +146,17 @@
 
     <p>The access to the ping Collection can also be protected using <a href="http://webid.info/spec/">WebID</a>, allowing pingback services to find the identity of the pinger and to restrict ping senders for certain resources to a specific group. Juliet's SWS could by protecting her endpoint with WebID discover the WebID used by Romeo's SWS, and so present this ping correctly as coming from Romeo himself. <br /></p>
 
-    <h2>4. Conclusions</h2>
+    <h2>4. Applications</h2>
 
     <p>The RESTful pingback protocol makes it very easy to grow one’s social profile. But it can be used for a lot more. Some ideas would be:</p>
     <ul>
         <li>implementing a simple ‘poke me’ service</li>
-        <li>swat0: tag someone in a picture and notifying them </li>
+        <li>Federated Social Web <a href="http://www.w3.org/2005/Incubator/federatedsocialweb/wiki/SWAT0">swat0</a>: tag someone or comment on someone's a picture and notifying them (and of course they are on different services) </li>
         <li>simple messaging service (possibly replace e-mail): post a local atom entry and ping the person one wants to send it to, allowing access to the entry only by authenticating them using WebID</li>
         <li>Authorization: as described above with Romeo seeking access to Juliet’s files, but for commercial services (e.g. a recommendation service based on foaf:interest entries)</li>
     </ul>
+ 
+    <h2>5. Summary </h2>
 
     <p>Compared to Refback, RESTful pingback (RP) can send a comment, is more extensible, and can work with servers the user has very little control over.</p>
 
@@ -162,7 +164,9 @@
 
     <p>Compared to Pingback, RP can work with all formats, does not require XML-RPC, works with HTTP return codes for error messaging, allowing robots and humans to work together (by simultaneously accessing the same resource).</p>
 
-    <p>If there was a way of semantically marking up forms even the attribute names would no longer need to be hard coded.<br /></p>
+    <p>Further studies would need to compare this to the <a href="http://www.salmon-protocol.org/">Salmon</a> and <a href="http://ostatus.org/specification">OStatus</a> stack. Some intial thoughts are that the <code>ping:Container</code> can of course return a representation in Atom format with the <a href="http://activitystrea.ms/spec/1.0/atom-activity-02.html">Atom Activity Extensions</a>. The Atom Activity Extension can itself be described semantically as the <a href="http://xmlns.notu.be/aair/">Atom Activity Streams RDF mapping</a> is doing. So at least at the Atom format level there could allow agreement.</p>
+     
+    <p>If there was a way of semantically marking up forms then the attribute names would no longer need to be hard coded. </p>
 
     <h2>Implementations:</h2>
     <ul>
@@ -172,8 +176,6 @@
         <li><a href="http://webid.fcns.eu/pingback.php">http://webid.fcns.eu/</a></li>
         <li><a href="http://incubator.apache.org/clerezza/">Apache Clerezza</a></li>
     </ul>
-
-    <p>&nbsp;</p>
 
     <h2>References</h2>
     <ul>
