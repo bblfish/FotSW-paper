@@ -91,8 +91,13 @@
 
     <h3>2.4 Semantic Pingback</h3>
 
-    <p><a href="http://aksw.org/Projects/SemanticPingBack">Semantic pingback</a> makes it easy for documents in any format to declare a pingback service. It does this by abstracting from formats and defining the protocol at the semantic level. A format need just specify a transform into RDF. XML formats can do this using <a href="http://www.w3.org/2004/01/rdxh/spec">GRDDL</a>, and JSON formats can use <a href="http://buzzword.org.uk/2008/jsonGRDDL/spec.20100903">json-GRDDL</a>, similar transforms could be created for most other format.</p>
+    <p><a href="http://aksw.org/Projects/SemanticPingBack">Semantic pingback</a> makes it easy for documents in any format to declare a pingback service.
+    It does this by abstracting from formats and defining the protocol at the semantic level.
+    A format need just specify a transform into RDF.
+    XML formats can do this using <a href="http://www.w3.org/2004/01/rdxh/spec">GRDDL</a>, and JSON formats can use <a href="http://buzzword.org.uk/2008/jsonGRDDL/spec.20100903">json-GRDDL</a>, similar transforms could be created for most other format.</p>
 
+    <p>The main advantage of Semantic Pingback is the ability to accept not only dumb untyped links from the source to the target but also typed links in the sense of an <code>owl:ObjectProperty</code> and any other statements which uses the target as subject or object.
+    This allows any kind of remote comments, polls or any other activity just over Semantic Pingback and goes far beyond the friending use-case described here.</p>
     <p>Any resource can point to a simple xml-rpc pingback service by declaring a relation from the resource to such a service in one simple statement written in Turtle as:</p>
 
     <pre>@prefix pingback: &lt;http://purl.org/net/pingback/&gt; .
