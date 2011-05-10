@@ -27,6 +27,7 @@
   }
   ul.authorship { list-style:none; }
   ul.authorship li { display: inline; }
+  ul.authorship li:after { content: ' • ' }
   
   .image .caption { font-size: 80%; text-align: center; }
   </style>
@@ -35,14 +36,12 @@
 <body>
     <h1 property="dc:title">Friending on the Social Web</h1>
     <div class="description">
-<!--
         <p datatype="" property="dc:description">Position Paper for <a href=
         "http://d-cent.org/fsw2011/">Federated Social Web</a>
         2nd-5th May 2011, Berlin (Germany)</p>
--->
         <p class="headerish"><strong>Authors</strong>:</p>
         <ul class="authorship" rel="dc:creator">
-          <li about="http://bblfish.net/#hjs" typeof="foaf:Person"><a rel="foaf:homepage" href="http://bblfish.net/"  property="foaf:name">Henry Story</a>, Foaf-Protocols Admin / WebID Incubator Chair / Apache Commiter<br /></li>
+          <li about="http://bblfish.net/#hjs" typeof="foaf:Person">• <a rel="foaf:homepage" href="http://bblfish.net/"  property="foaf:name">Henry Story</a>, Foaf-Protocols Admin / WebID Incubator Chair / Apache Committer<br /></li>
           <li about="http://fcns.eu/people/andrei/card#me" typeof="foaf:Person"><a rel="foaf:homepage" href="http://fcns.eu/"  property="foaf:name">Andrei Sambra</a>, <a rel="foaf:workplaceHomepage" href="http://www.telecom-sudparis.eu/en_accueil.html">TELECOM SudParis</a></li>
           <li about="http://sebastian.tramp.name" typeof="foaf:Person"><a rel="foaf:homepage" href="http://sebastian.tramp.name/"  property="foaf:name">Sebastian Tramp</a>, <a rel="foaf:workplaceHomepage" href="http://aksw.org">AKSW, University of Leipzig</a></li>
         </ul>
