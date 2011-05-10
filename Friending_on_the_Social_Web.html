@@ -42,7 +42,7 @@
 -->
         <p class="headerish"><strong>Authors</strong>:</p>
         <ul class="authorship" rel="dc:creator">
-          <li about="http://bblfish.net/#hjs" typeof="foaf:Person"><a rel="foaf:homepage" href="http://bblfish.net/"  property="foaf:name">Henry Story</a>, Foaf-Procols Chair / Apache Commiter<br /></li>
+          <li about="http://bblfish.net/#hjs" typeof="foaf:Person"><a rel="foaf:homepage" href="http://bblfish.net/"  property="foaf:name">Henry Story</a>, Foaf-Protocols Admin / WebID Incubator Chair / Apache Commiter<br /></li>
           <li about="http://fcns.eu/people/andrei/card#me" typeof="foaf:Person"><a rel="foaf:homepage" href="http://fcns.eu/"  property="foaf:name">Andrei Sambra</a>, <a rel="foaf:workplaceHomepage" href="http://www.telecom-sudparis.eu/en_accueil.html">TELECOM SudParis</a></li>
           <li about="http://sebastian.tramp.name" typeof="foaf:Person"><a rel="foaf:homepage" href="http://sebastian.tramp.name/"  property="foaf:name">Sebastian Tramp</a>, <a rel="foaf:workplaceHomepage" href="http://aksw.org">AKSW, University of Leipzig</a></li>
         </ul>
@@ -159,35 +159,41 @@
         <li>implementing a simple ‘poke me’ service</li>
         <li>Federated Social Web <a href="http://www.w3.org/2005/Incubator/federatedsocialweb/wiki/SWAT0">swat0</a>: tag someone or comment on someone's a picture and notifying them (and of course they are on different services) </li>
         <li>simple messaging service (possibly replace e-mail): post a local atom entry and ping the person one wants to send it to, allowing access to the entry only by authenticating them using WebID</li>
-        <li>Authorization: as described above with Romeo seeking access to Juliet’s files, but for commercial services (e.g. a recommendation service based on foaf:interest entries)</li>
+        <li>Authorization: as described above with Romeo seeking access to Juliet’s files, but for commercial services (e.g. a recommendation service based on foaf:interest entries, or a <a href="http://blogs.oracle.com/bblfish/entry/sketch_of_a_restful_photo">Photo Printing service</a>, asking for access to certain published photos.)</li>
     </ul>
  
     <h2>5. Summary </h2>
 
-    <p>Compared to Refback, RESTful pingback (RP) can send a comment, is more extensible, and can work with servers the user has very little control over.</p>
+    <p>Compared to Refback, RESTful pingback can send a comment, is more extensible, and can work with servers the user has very little control over.</p>
 
-    <p>Compared to Trackback, RP implements the semantics correctly, and does not require any specific formats to work.</p>
+    <p>Compared to Trackback, RESTful Pingback (RP) comes a decade of semantic web development and research later. It works nicely with html and does not require any specific formats to work.</p>
 
-    <p>Compared to Pingback, RP can work with all formats, does not require XML-RPC, works with HTTP return codes for error messaging, allowing robots and humans to work together (by simultaneously accessing the same resource).</p>
+    <p>Compared to Pingback, RP can work with most formats, does not require XML-RPC, works with HTTP return codes for error messaging, allowing robots and humans to work together (by simultaneously accessing the same resource).</p>
 
-    <p>Further studies would need to compare this to the <a href="http://www.salmon-protocol.org/">Salmon</a> and <a href="http://ostatus.org/specification">OStatus</a> stack. Some intial thoughts are that the <code>ping:Container</code> can of course return a representation in Atom format with the <a href="http://activitystrea.ms/spec/1.0/atom-activity-02.html">Atom Activity Extensions</a> (Note that the Atom Activity Extension can itself be described semantically as the <a href="http://xmlns.notu.be/aair/">Atom Activity Streams RDF mapping</a> project is doing.) If the Container could return an Atom format, then there is no reason why one could not also POST an atom entry to such a container too. <a href="http://pingback.aksw.org">pingback.aksw.org</a> already accepts both XML/RPC POSTS and the RESTful pingback. It would certainly be possible to allow certain types of Atom Entries to be posted too.</p>
+    <h2>6 Future Work</h2>
+
+    <p>Further studies would need to compare this to the <a href="http://www.salmon-protocol.org/">Salmon</a> and <a href="http://ostatus.org/specification">OStatus</a> stack. Some intial thoughts are that the <code>ping:Container</code> can of course return a representation in Atom format marked up with the <a href="http://activitystrea.ms/spec/1.0/atom-activity-02.html">Atom Activity Extensions</a> (Note that the Atom Activity Extension can itself be described semantically as the <a href="http://xmlns.notu.be/aair/">Atom Activity Streams RDF mapping</a> project is doing.) If the Container could return an Atom format, then there is no reason why one could not also POST an atom entry to such a container too. <a href="http://pingback.aksw.org">pingback.aksw.org</a> already accepts both XML/RPC POSTS and the RESTful pingback. It certainly seems possible to allow certain types of Atom Entries to be posted too.</p>
      
-    <p>If there was a way of semantically marking up forms then the attribute names would no longer need to be hard coded. </p>
+    <p>If there was a way of semantically marking up forms then the attribute names would no longer need to be hard coded as they are now. A better mapping from html forms to the semantic web would
+      be very useful. So would better and more flexible html forms standards, which would allow the post a graph of relations. Perhaps <a href="http://www.w3.org/TR/sparql11-update/">SPARQL UPDATE</a> can be thought of as laying the ground for that. </p>
 
     <h2>Implementations:</h2>
+    <p>The <a href="http://www.w3.org/wiki/Pingback">W3C wiki Pingback page</a> points to a current list of implementations of the protocol. The following implementations were 
+      important to the writing of this paper:</p>
     <ul>
         <li><a href="http://ontowiki.net">OntoWiki</a> is a semantic data wiki and the initial implementation of Semantic Pingback. OntoWiki uses it to allow rich communication between any Linked Data resource on any Linked Data Wiki.</li>
         <li><a href="http://pingback.aksw.org">pingback.aksw.org</a> is a stand-alone and backend independent pingback server. If the target resource (e.g. a <code>foaf:Person</code>) has a <code>mailto:</code> address, the service will send a ping notification message to this address.</li>
         <li><a href="http://triplify.org">Triplify</a> is a RDB2RDF converter and utilizes Semantic Pingback to gather links to its exported resources and include these links in the exported documents.</li>
         <li><a href="http://webid.fcns.eu/pingback.php">http://webid.fcns.eu/</a></li>
-        <li><a href="http://incubator.apache.org/clerezza/">Apache Clerezza</a></li>
+        <li><a href="http://incubator.apache.org/clerezza/">Apache Clerezza</a>'s profile editor</li>
+        <li><a href="http://ods.openlinksw.com/wiki/ODS/">OpenLink Data Spaces</a>'s implementation.</li>
     </ul>
 
     <h2>References</h2>
     <ul>
-        <li><a href="http://www.w3.org/wiki/WebID">http://www.w3.org/wiki/WebID</a></li>
+        <li><a href="http://www.w3.org/wiki/WebID">http://www.w3.org/wiki/WebID</a> and <a href="http://www.w3.org/wiki/Foaf+ssl">http://www.w3.org/wiki/Foaf+ssl</a></li>
         <li><a href="http://en.wikipedia.org/wiki/Refback">http://en.wikipedia.org/wiki/Refback</a></li>
-        <li><a href="http://en.wikipedia.org/wiki/HTTP_referrer">http://en.wikipedia.org/wiki/HTTP_referrer</a></li>
+        <li><a href="http://www.w3.org/Protocols/rfc2616/rfc2616-sec14.html#sec14.36">http://www.w3.org/Protocols/rfc2616/rfc2616-sec14.html#sec14.36</a></li>
         <li><a href="http://www.sixapart.com/pronet/docs/trackback_spec">http://www.sixapart.com/pronet/docs/trackback_spec</a></li>
         <li><a href="http://en.wikipedia.org/wiki/Pingback">http://en.wikipedia.org/wiki/Pingback</a></li>
         <li><a href="http://svn.aksw.org/papers/2010/EKAW_SemanticPingback/public.pdf">Weaving a Social Data Web with Semantic Pingback</a>,
